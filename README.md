@@ -1,4 +1,4 @@
-### SQL Analysis Mini-Project
+## SQL Analysis Mini-Project
 
 #### Overview
 This repository contains the code used in a small project meant as an exercise in data ingestion and SQL programming. Here, multiple flat <tt>.csv</tt> files are ingested into a MySQL database. These files pertain to individual tables that contain data related to a soccer tournament. The exercise includes 20 analytics questions that can be answered by performing joins, aggregations, regular expressions, and windowing functions.
