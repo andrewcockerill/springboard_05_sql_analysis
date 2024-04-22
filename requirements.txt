@@ -1,0 +1,11 @@
+greenlet==3.0.3
+mysql-connector-python==8.3.0
+numpy==1.26.4
+pandas==2.2.2
+python-dotenv==1.0.1
+pytz==2024.1
+pywin32==305.1
+setuptools==68.2.2
+SQLAlchemy==2.0.29
+tzdata==2024.1
+wheel==0.41.2
