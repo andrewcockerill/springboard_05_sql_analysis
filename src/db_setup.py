@@ -7,6 +7,8 @@ import os
 import logging
 from dotenv import load_dotenv
 import re
+import calendar
+import datetime
 
 # Constants
 load_dotenv()
@@ -32,6 +34,21 @@ fh = logging.FileHandler('../logs/db_setup.log')
 fh.setFormatter(formatter)
 logger.addHandler(fh)
 logger.info('application started')
+
+
+def date_replace(text):
+    # Helper function to adjust goal_score field in match_mast
+    # where score has been cast as a date in the form DD-MMM
+    # (assumes data issues will be in this format only)
+    month_names = list(calendar.month_abbr)[1:]
+    month_regex = "|".join(month_names)
+    search_result = re.search(month_regex, text)
+    output = re.sub(r"0(\d)", r"\1", text)
+    if search_result is not None:
+        return re.sub(month_regex, str(datetime.datetime.strptime(
+            search_result.group(0), "%b").month), output)
+    else:
+        return output
 
 
 # Setup Database
@@ -62,6 +79,11 @@ try:
         if table_name in DATE_FIELDS.keys():
             context_df.loc[:, DATE_FIELDS[table_name]] = pd.to_datetime(
                 context_df[DATE_FIELDS[table_name]]).dt.date
+
+        # Fix score formatting issue in match_mast (raw file formats some as dates)
+        if table_name == "match_mast":
+            context_df.loc[:, 'goal_score'] = context_df.goal_score.apply(
+                date_replace)  # Month abbreviations
 
         # Create table
         context_df.to_sql(table_name, con=engine,
